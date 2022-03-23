@@ -22,6 +22,12 @@
                 {{-- フォロワー一覧タブ --}}
                 <li class="nav-item"><a href="#" class="nav-link">Followers</a></li>
             </ul>
+            @if (Auth::id() == $user->id)
+                {{-- 投稿フォーム --}}
+                @include('backpackersnotes.form')
+            @endif
+            {{-- 投稿一覧 --}}
+            @include('backpackersnotes.backpackersnotes')
         </div>
     </div>
 @endsection

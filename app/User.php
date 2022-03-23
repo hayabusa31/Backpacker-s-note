@@ -36,4 +36,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+     /**
+     * このユーザが所有する投稿。（ Backpackersnoteモデルとの関係を定義）
+     */
+    public function backpackersnotes()
+    {
+        return $this->hasMany(Backpackersnote::class);
+    }
+    
+    /**
+     * このユーザに関係するモデルの件数をロードする。
+     */
+    public function loadRelationshipCounts()
+    {
+        $this->loadCount('backpackersnotes');
+    }
 }
