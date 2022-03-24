@@ -14,7 +14,7 @@ class BackpackersnotesController extends Controller
             $user = \Auth::user();
             // ユーザの投稿の一覧を作成日時の降順で取得
             // （後のChapterで他ユーザの投稿も取得するように変更しますが、現時点ではこのユーザの投稿のみ取得します）
-            $backpackersnotes = $user->backpackersnotes()->orderBy('created_at', 'desc')->paginate(10);
+            $backpackersnotes = $user->feed_backpackersnotes()->orderBy('created_at', 'desc')->paginate(10);
 
             $data = [
                 'user' => $user,
@@ -24,6 +24,22 @@ class BackpackersnotesController extends Controller
 
         // Welcomeビューでそれらを表示
         return view('welcome', $data);
+    }
+    
+    public function store(Request $request)
+    {
+        // バリデーション
+        $request->validate([
+            'content' => 'required|max:255',
+        ]);
+
+        // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
+        $request->user()->backpackersnotes()->create([
+            'content' => $request->content,
+        ]);
+
+        // 前のURLへリダイレクトさせる
+        return back();
     }
     
     public function destroy($id)
